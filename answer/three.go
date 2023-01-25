@@ -1,0 +1,5 @@
+package answer
+
+func Three() {
+
+}
