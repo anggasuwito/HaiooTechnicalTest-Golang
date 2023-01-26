@@ -1,10 +1,30 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"HaiooTechnicalTest-Golang/api/controller"
+	"HaiooTechnicalTest-Golang/models"
+	"github.com/gin-gonic/gin"
+)
 
-func CartRoutes(r *gin.Engine) {
-	cartAPI := r.Group("/cart")
-	cartAPI.POST("")
-	cartAPI.DELETE("")
-	cartAPI.GET("")
+type CartRoutes struct {
+	Route      *gin.Engine
+	Controller controller.CartControllerI
+}
+
+type CartRoutesI interface {
+	Routes()
+}
+
+func NewCartRoutes(route *gin.Engine, conf *models.Config) CartRoutesI {
+	return &CartRoutes{
+		Route:      route,
+		Controller: controller.NewCartController(conf),
+	}
+}
+
+func (r CartRoutes) Routes() {
+	cartAPI := r.Route.Group("/cart")
+	cartAPI.POST("", r.Controller.CreateProduct)
+	cartAPI.DELETE("", r.Controller.DeleteProduct)
+	cartAPI.GET("", r.Controller.GetProduct)
 }
