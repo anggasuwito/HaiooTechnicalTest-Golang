@@ -9,9 +9,4 @@ func MyAnswer() {
 	Two("telkom", "telecom")
 	Two("telkom", "tlkom")
 	fmt.Println()
-	Three()
-	fmt.Println()
-	Four()
-	fmt.Println()
-	Five()
 }
