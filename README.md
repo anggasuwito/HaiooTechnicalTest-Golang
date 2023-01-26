@@ -1,6 +1,12 @@
 ANSWER
 
+QUESTION NO 1 
 
+    Hasil dari pertanyaan nomor 1 akan tampil di log saat menjalankan program, inputnya digunakan sebagai parameter pada func MyAnswer() di answer/my_answer.go
+
+QUESTION NO 2
+
+    Hasil dari pertanyaan nomor 2 akan tampil di log saat menjalankan program, inputnya digunakan sebagai parameter pada func MyAnswer() di answer/my_answer.go
 
 QUESTION NO 3
 
