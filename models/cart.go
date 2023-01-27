@@ -1,16 +1,13 @@
 package models
 
-import "time"
-
 func (Cart) TableName() string {
 	return "cart"
 }
 
 type Cart struct {
-	KodeProduk string    `json:"kode_produk" gorm:"type:uuid;not null;primaryKey"`
-	NamaProduk string    `json:"nama_produk"`
-	Kuantitas  int       `json:"kuantitas"`
-	CreatedAt  time.Time `json:"created_at" gorm:"default:current_timestamp;not null"`
+	KodeProduk string `json:"kode_produk" gorm:"type:uuid;not null;primaryKey"`
+	NamaProduk string `json:"nama_produk"`
+	Kuantitas  int    `json:"kuantitas"`
 }
 
 type CartRequestBody struct {
@@ -19,6 +16,6 @@ type CartRequestBody struct {
 }
 
 type CartRequestParameter struct {
-	NamaProduk string `query:"nama_produk"`
-	Kuantitas  int    `query:"kuantitas"`
+	NamaProduk string `form:"nama_produk"`
+	Kuantitas  int    `form:"kuantitas"`
 }

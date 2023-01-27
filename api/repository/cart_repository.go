@@ -15,12 +15,33 @@ type CartRepositoryI interface {
 	CreateProduct(data models.Cart) error
 	DeleteProduct(kodeProduk string) error
 	GetProduct(param models.CartRequestParameter) ([]models.Cart, error)
+	FindByCode(kodeProduk string) (models.Cart, error)
+	FindByName(namaProduk string) (models.Cart, error)
+	UpdateProduct(data models.Cart) error
 }
 
 func NewCartRepository(db *gorm.DB) CartRepositoryI {
 	return &CartRepository{
 		DB: db,
 	}
+}
+
+func (r CartRepository) FindByName(namaProduk string) (models.Cart, error) {
+	var res models.Cart
+	err := r.DB.Debug().Model(&models.Cart{}).Where("nama_produk = ?", namaProduk).Scan(&res).Error
+	return res, err
+}
+
+func (r CartRepository) FindByCode(kodeProduk string) (models.Cart, error) {
+	var res models.Cart
+	err := r.DB.Debug().Model(&models.Cart{}).Where("kode_produk = ?", kodeProduk).Scan(&res).Error
+	return res, err
+}
+
+func (r CartRepository) UpdateProduct(data models.Cart) error {
+	return r.DB.Debug().Model(&models.Cart{}).Where("kode_produk = ?", data.KodeProduk).Updates(map[string]interface{}{
+		"kuantitas": data.Kuantitas,
+	}).Error
 }
 
 func (r CartRepository) CreateProduct(data models.Cart) error {
@@ -40,6 +61,6 @@ func (r CartRepository) GetProduct(param models.CartRequestParameter) ([]models.
 	if param.Kuantitas != 0 {
 		where = append(where, fmt.Sprintf("kuantitas = %v", param.Kuantitas))
 	}
-	err := r.DB.Debug().Where(strings.Join(where, " AND ")).Find(&res).Error
+	err := r.DB.Debug().Model(&models.Cart{}).Select("*").Where(strings.Join(where, " AND ")).Scan(&res).Error
 	return res, err
 }

@@ -3,8 +3,8 @@ package usecase
 import (
 	"HaiooTechnicalTest-Golang/api/repository"
 	"HaiooTechnicalTest-Golang/models"
+	"errors"
 	"github.com/google/uuid"
-	"time"
 )
 
 type CartUsecase struct {
@@ -24,18 +24,46 @@ func NewCartUsecase(conf *models.Config) CartUsecaseI {
 }
 
 func (u CartUsecase) CreateProduct(body models.CartRequestBody) error {
-	return u.Repo.CreateProduct(models.Cart{
-		KodeProduk: uuid.New().String(),
-		NamaProduk: body.NamaProduk,
-		Kuantitas:  body.Kuantitas,
-		CreatedAt:  time.Now(),
-	})
+	cart, err := u.Repo.FindByName(body.NamaProduk)
+	if err != nil {
+		return err
+	}
+
+	if cart.KodeProduk != "" {
+		cart.Kuantitas += body.Kuantitas
+		return u.Repo.UpdateProduct(cart)
+	} else {
+		return u.Repo.CreateProduct(models.Cart{
+			KodeProduk: uuid.New().String(),
+			NamaProduk: body.NamaProduk,
+			Kuantitas:  body.Kuantitas,
+		})
+	}
 }
 
 func (u CartUsecase) DeleteProduct(kodeProduk string) error {
-	return u.Repo.DeleteProduct(kodeProduk)
+	_, err := uuid.Parse(kodeProduk)
+	if err != nil {
+		return errors.New("invalid uuid format")
+	}
+	data, err := u.Repo.FindByCode(kodeProduk)
+	if err != nil {
+		return err
+	}
+	if data.KodeProduk == "" {
+		return errors.New("record not found")
+	}
+	err = u.Repo.DeleteProduct(kodeProduk)
+	return err
 }
 
 func (u CartUsecase) GetProduct(params models.CartRequestParameter) ([]models.Cart, error) {
-	return u.Repo.GetProduct(params)
+	res, err := u.Repo.GetProduct(params)
+	if err != nil {
+		return nil, err
+	}
+	if len(res) == 0 {
+		return nil, errors.New("record not found")
+	}
+	return res, nil
 }

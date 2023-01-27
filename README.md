@@ -50,3 +50,24 @@ QUESTION NO 4
 QUESTION NO 5
 
     Indexing merupakan proses untuk mempercepat pencarian query, menurut saya indexing memiliki proses dengan memfokuskan proses pencarian pada kolom yang diindexing. Tanpa indexing proses pencarian akan diproses secara merata pada semua kolom dan menghasilkan query yang lambat jika jumlah row dan kolom banyak
+
+QUESTION NO 6
+    
+    1.Ubah value di file .env sesuai dengan konfigurasi local (databasenya menggunakan PostgreSQL)
+    2.Tambahkan database sesuai dengan PG_DBNAME di .env
+    3.Jalankan perintah 'go run main.go'
+    CONTOH REQUEST:
+
+    METHOD GET
+    localhost:8080/cart?nama_produk=produk A&kuantitas=18
+
+    METHOD POST
+    localhost:8080/cart
+        BODY
+        {
+            "nama_produk": "produk C",
+            "kuantitas": 9
+        }
+    
+    METHOD DELETE
+    localhost:8080/cart/f29f3139-f0b1-429c-b2c8-5e9ad0ce2314

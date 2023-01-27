@@ -34,12 +34,14 @@ func (c CartController) CreateProduct(g *gin.Context) {
 		if errors.As(err, &v) {
 			for _, fieldError := range v {
 				g.JSON(http.StatusBadRequest, models.Response{
+					Status:  "Error",
 					Message: fmt.Sprintf("%v %+v", fieldError.Field(), fieldError.Tag()),
 				})
 				return
 			}
 		}
 		g.JSON(http.StatusBadRequest, models.Response{
+			Status:  "Error",
 			Message: err.Error(),
 		})
 		return
@@ -47,12 +49,13 @@ func (c CartController) CreateProduct(g *gin.Context) {
 	err = c.Usecase.CreateProduct(body)
 	if err != nil {
 		g.JSON(http.StatusBadRequest, models.Response{
+			Status:  "Error",
 			Message: err.Error(),
 		})
 		return
 	}
 	g.JSON(http.StatusOK, models.Response{
-		Message: "Success",
+		Status: "Success",
 	})
 }
 
@@ -61,12 +64,13 @@ func (c CartController) DeleteProduct(g *gin.Context) {
 	err := c.Usecase.DeleteProduct(kodeProduk)
 	if err != nil {
 		g.JSON(http.StatusBadRequest, models.Response{
+			Status:  "Error",
 			Message: err.Error(),
 		})
 		return
 	}
 	g.JSON(http.StatusOK, models.Response{
-		Message: "Success",
+		Status: "Success",
 	})
 }
 
@@ -75,6 +79,7 @@ func (c CartController) GetProduct(g *gin.Context) {
 	err := g.ShouldBindQuery(&params)
 	if err != nil {
 		g.JSON(http.StatusBadRequest, models.Response{
+			Status:  "Error",
 			Message: err.Error(),
 		})
 		return
@@ -82,12 +87,13 @@ func (c CartController) GetProduct(g *gin.Context) {
 	res, err := c.Usecase.GetProduct(params)
 	if err != nil {
 		g.JSON(http.StatusBadRequest, models.Response{
+			Status:  "Error",
 			Message: err.Error(),
 		})
 		return
 	}
 	g.JSON(http.StatusOK, models.Response{
-		Message: "Success",
-		Data:    res,
+		Status: "Success",
+		Data:   res,
 	})
 }
