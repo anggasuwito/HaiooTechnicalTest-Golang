@@ -25,6 +25,6 @@ func NewCartRoutes(route *gin.Engine, conf *models.Config) CartRoutesI {
 func (r CartRoutes) Routes() {
 	cartAPI := r.Route.Group("/cart")
 	cartAPI.POST("", r.Controller.CreateProduct)
-	cartAPI.DELETE("", r.Controller.DeleteProduct)
+	cartAPI.DELETE("/:kodeProduk", r.Controller.DeleteProduct)
 	cartAPI.GET("", r.Controller.GetProduct)
 }

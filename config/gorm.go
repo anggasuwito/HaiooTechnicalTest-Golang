@@ -1,6 +1,7 @@
 package config
 
 import (
+	"HaiooTechnicalTest-Golang/models"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -20,5 +21,6 @@ func GormDB() *gorm.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
+	db.AutoMigrate(&models.Cart{})
 	return db
 }
